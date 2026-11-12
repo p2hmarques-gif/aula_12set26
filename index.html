@@ -1,17 +1,282 @@
+<!-- DOCTYPE informa ao navegador que este documento utiliza HTML5. -->
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Página</title>
 
-    <!-- CSS -->
+<!-- lang define o idioma da página para navegadores e leitores de tela. -->
+<html lang="pt-BR">
+
+<head>
+    <!-- UTF-8 permite exibir corretamente acentos e caracteres especiais. -->
+    <meta charset="UTF-8">
+
+    <!--
+        viewport controla a adaptação da página ao tamanho da tela.
+        width=device-width: usa a largura do dispositivo.
+        initial-scale=1.0: inicia a página com escala de 100%.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Texto apresentado na aba do navegador. -->
+    <title>Explorador Pokémon</title>
+
+    <!--
+        link conecta o HTML ao arquivo CSS.
+        rel="stylesheet": informa que o arquivo é uma folha de estilos.
+        href: indica o caminho do arquivo.
+    -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- JavaScript -->
+    <!--
+        script conecta o HTML ao JavaScript.
+        src: indica o arquivo que será carregado.
+        defer: aguarda a leitura do HTML antes de executar o JavaScript.
+    -->
     <script src="script.js" defer></script>
 </head>
+
+<!-- body contém tudo o que será apresentado na página. -->
 <body>
-    <h1>Olá, mundo!</h1>
+
+    <!--
+        header representa o cabeçalho.
+        class permite aplicar estilos CSS a um ou mais elementos.
+    -->
+    <header class="topo">
+
+        <!-- a cria um link; href define seu destino. -->
+        <a class="marca" href="index.html">
+            ◉ Pokédex
+
+            <!-- span agrupa um pequeno trecho de conteúdo. -->
+            <span>Explorador Pokémon</span>
+        </a>
+
+        <span class="selo">Dados da PokéAPI</span>
+    </header>
+
+    <!-- main identifica o conteúdo principal da página. -->
+    <main>
+
+        <!-- section agrupa um conjunto de conteúdos relacionados. -->
+        <section class="introducao">
+
+            <!-- p representa um parágrafo. -->
+            <p class="etiqueta">DESCUBRA E EXPLORE</p>
+
+            <!-- h1 é o título principal da página. -->
+            <h1>
+                Um universo de Pokémon.<br>
+                Uma busca de cada vez.
+            </h1>
+
+            <p class="descricao">
+                Explore características, habilidades e estatísticas em um só lugar.
+            </p>
+
+            <!--
+                form agrupa os controles de entrada.
+                id identifica um elemento de maneira única no documento.
+                O JavaScript utiliza este ID para detectar o envio.
+            -->
+            <form id="formPoke">
+
+                <!--
+                    label descreve o campo.
+                    for aponta para o ID do input correspondente.
+                    Clicar no rótulo também seleciona o campo.
+                -->
+                <label for="idPoke">Nome ou número do Pokémon</label>
+
+                <!-- div é um agrupador genérico usado na organização visual. -->
+                <div class="busca">
+
+                    <!--
+                        type="text": permite digitar nomes ou números.
+                        placeholder: exemplo mostrado quando o campo está vazio.
+                        aria-describedby: associa o campo ao texto de orientação.
+                        autocomplete="off": solicita que o navegador não sugira
+                        valores preenchidos anteriormente.
+                        required: impede o envio com o campo completamente vazio.
+                    -->
+                    <input
+                        id="idPoke"
+                        type="text"
+                        placeholder="Ex.: pikachu ou 25"
+                        aria-describedby="dicaBusca"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <!-- type="submit" faz o botão enviar o formulário. -->
+                    <button id="buscar" type="submit">
+                        Buscar Pokémon →
+                    </button>
+                </div>
+
+                <!-- small apresenta uma orientação complementar. -->
+                <small id="dicaBusca">
+                    Use o nome em inglês ou o número na Pokédex.
+                </small>
+            </form>
+
+            <div class="exemplos">
+                <span>Experimente:</span>
+
+                <!--
+                    type="button": o botão não envia um formulário sozinho.
+                    data-pokemon: atributo personalizado que guarda o ID.
+                    O JavaScript lê esse valor para executar a busca.
+                -->
+                <button type="button" data-pokemon="25">
+                    Pikachu
+                </button>
+
+                <button type="button" data-pokemon="1">
+                    Bulbasaur
+                </button>
+
+                <button type="button" data-pokemon="6">
+                    Charizard
+                </button>
+            </div>
+
+            <!--
+                Espaço preenchido pelo JavaScript com mensagens.
+                role="status": identifica uma mensagem de estado.
+                aria-live="polite": solicita que leitores de tela anunciem
+                as atualizações sem interromper a leitura atual.
+            -->
+            <p id="msg" role="status" aria-live="polite"></p>
+        </section>
+
+        <!--
+            hidden mantém o resultado oculto inicialmente.
+            aria-label fornece um nome acessível para a seção.
+        -->
+        <section id="resultado" aria-label="Dados do Pokémon" hidden>
+
+            <div class="painel-principal">
+
+                <!-- article reúne o cartão de identificação do Pokémon. -->
+                <article class="retrato">
+
+                    <!-- Elementos vazios serão preenchidos pelo JavaScript. -->
+                    <p id="numeroPoke" class="etiqueta"></p>
+
+                    <!-- h2 representa um título abaixo do h1 na hierarquia. -->
+                    <h2 id="nomePokemon"></h2>
+
+                    <div id="tipos" class="tipos"></div>
+
+                    <!--
+                        img exibe uma imagem.
+                        O JavaScript adicionará src com o endereço da imagem.
+                        alt receberá uma descrição para leitores de tela.
+                        hidden evita mostrar a imagem antes do carregamento.
+                    -->
+                    <img id="imgPoke" alt="" hidden>
+
+                    <p id="semImagem" hidden>
+                        Imagem indisponível.
+                    </p>
+
+                    <small>
+                        Ilustração da aparência do Pokémon.
+                    </small>
+                </article>
+
+                <!--
+                    aria-labelledby usa o texto do elemento indicado
+                    como nome acessível desta seção.
+                -->
+                <section class="detalhes" aria-labelledby="tituloDetalhes">
+                    <p class="etiqueta">VISÃO GERAL</p>
+
+                    <h2 id="tituloDetalhes">Conheça os detalhes</h2>
+
+                    <p class="apoio">
+                        Medidas e características desta espécie.
+                    </p>
+
+                    <!--
+                        dl cria uma lista de descrições.
+                        dt contém o nome da informação.
+                        dd contém o valor ou a descrição correspondente.
+                    -->
+                    <dl class="metricas">
+                        <div>
+                            <dt>Altura</dt>
+                            <dd id="alturaPoke"></dd>
+                        </div>
+
+                        <div>
+                            <dt>Peso</dt>
+                            <dd id="pesoPoke"></dd>
+                        </div>
+
+                        <div>
+                            <dt>Experiência base</dt>
+                            <dd id="basePoke"></dd>
+                        </div>
+
+                        <div>
+                            <dt>Ordem na API</dt>
+                            <dd id="ordemPoke"></dd>
+                        </div>
+                    </dl>
+
+                    <!-- h3 é um subtítulo dentro da seção de detalhes. -->
+                    <h3>Habilidades</h3>
+
+                    <p class="apoio">
+                        A etiqueta indica quando uma habilidade é oculta.
+                    </p>
+
+                    <!--
+                        ul é uma lista sem numeração.
+                        O JavaScript criará seus itens com a tag li.
+                    -->
+                    <ul id="habilidades" class="habilidades"></ul>
+                </section>
+            </div>
+
+            <section class="estatisticas" aria-labelledby="tituloStats">
+                <div>
+                    <p class="etiqueta">ATRIBUTOS BASE</p>
+
+                    <h2 id="tituloStats">Perfil de combate</h2>
+
+                    <p class="apoio">
+                        Valores base da espécie. As barras usam o maior
+                        atributo deste Pokémon como referência.
+                    </p>
+                </div>
+
+                <!-- O JavaScript adicionará os nomes, valores e barras aqui. -->
+                <div id="stats" class="stats"></div>
+            </section>
+        </section>
+
+        <!-- Painel mostrado antes de uma consulta bem-sucedida. -->
+        <section id="inicio" class="vazio">
+
+            <!--
+                aria-hidden evita que leitores de tela anunciem
+                este símbolo, pois ele é apenas decorativo.
+            -->
+            <span aria-hidden="true">◎</span>
+
+            <h2>Sua próxima descoberta começa aqui</h2>
+
+            <p>
+                Faça uma busca ou escolha um dos exemplos acima.
+            </p>
+        </section>
+    </main>
+
+    <!-- footer representa o rodapé da página. -->
+    <footer>
+        <span>Projeto acadêmico • HTML, CSS e JavaScript</span>
+        <span>Informações e imagens: PokéAPI • Requer internet</span>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,971 @@
+/* ==========================================
+   COMO LER UMA REGRA CSS
+   ========================================== */
+
+/*
+    seletor {
+        propriedade: valor;
+    }
+
+    O seletor indica quais elementos serão alterados.
+    A propriedade indica o que será alterado.
+    O valor define como essa propriedade deve ficar.
+
+    Exemplos de seletores:
+    body       → seleciona a tag body.
+    .topo      → seleciona elementos com class="topo".
+    #buscar    → seleciona o elemento com id="buscar".
+*/
+
+/* ==========================================
+   CORES E CONFIGURAÇÕES GERAIS
+   ========================================== */
+
+/*
+    :root representa o elemento raiz do documento.
+    Nomes iniciados com -- são propriedades personalizadas,
+    utilizadas aqui como variáveis para guardar as cores.
+*/
+:root {
+    --fundo: #f5f6f8;
+    --texto: #202936;
+    --suave: #616c7c;
+    --vermelho: #bd303c;
+    --borda: #e1e5eb;
+}
+
+/*
+    * seleciona todos os elementos.
+    border-box inclui padding e borda na largura e altura definidas.
+*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    /* Remove a margem que o navegador aplica por padrão. */
+    margin: 0;
+
+    /* vh equivale a 1% da altura da janela. */
+    min-height: 100vh;
+
+    /*
+        dvh considera a altura dinâmica da área visível.
+        A linha anterior funciona como alternativa em navegadores antigos.
+    */
+    min-height: 100dvh;
+
+    /* Grid permite organizar elementos em linhas e colunas. */
+    display: grid;
+
+    /*
+        Três linhas: cabeçalho, conteúdo e rodapé.
+        auto usa a altura necessária.
+        1fr recebe o espaço restante.
+    */
+    grid-template-rows: auto 1fr auto;
+
+    /* Arial é a primeira opção; sans-serif é a alternativa. */
+    font-family: Arial, sans-serif;
+
+    /* var() recupera o valor de uma variável definida em :root. */
+    background: var(--fundo);
+    color: var(--texto);
+}
+
+/* A vírgula aplica a mesma regra aos dois tipos de elemento. */
+button,
+input {
+    /* inherit faz o controle herdar a fonte do elemento pai. */
+    font: inherit;
+}
+
+button {
+    /* Mostra o cursor de mão sobre os botões. */
+    cursor: pointer;
+}
+
+/*
+    [hidden] seleciona elementos que possuem esse atributo.
+    !important dá prioridade à declaração.
+    Isso impede que display:grid ou display:flex revele esses elementos.
+*/
+[hidden] {
+    display: none !important;
+}
+
+/*
+    :focus-visible destaca o foco quando necessário,
+    principalmente durante a navegação por teclado.
+*/
+:focus-visible {
+    outline: 3px solid #246ac8;
+    outline-offset: 3px;
+}
+
+/* ==========================================
+   CABEÇALHO
+   ========================================== */
+
+.topo {
+    min-height: 54px;
+
+    /* Dois valores: espaço vertical e espaço horizontal. */
+    padding: 9px 2.5%;
+
+    /* Flexbox organiza os filhos em uma linha por padrão. */
+    display: flex;
+
+    /* Centraliza os filhos no eixo transversal, aqui o vertical. */
+    align-items: center;
+
+    /* Coloca os grupos nas extremidades da linha. */
+    justify-content: space-between;
+
+    /* Distância entre os elementos filhos. */
+    gap: 14px;
+
+    border-bottom: 1px solid var(--borda);
+    background: white;
+}
+
+.marca {
+    color: var(--vermelho);
+
+    /* Remove o sublinhado padrão do link. */
+    text-decoration: none;
+
+    font-size: 24px;
+
+    /* Valores maiores representam pesos de fonte mais fortes. */
+    font-weight: 800;
+
+    /* Evita quebra de linha dentro da marca. */
+    white-space: nowrap;
+}
+
+/* O espaço seleciona spans que estejam dentro de .marca. */
+.marca span {
+    display: inline-block;
+    margin-left: 12px;
+    color: var(--suave);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.selo {
+    color: var(--suave);
+    font-size: 12px;
+}
+
+/* ==========================================
+   ESTRUTURA PRINCIPAL
+   ========================================== */
+
+main {
+    width: 100%;
+
+    /* Permite que o item Grid reduza sua altura quando possível. */
+    min-height: 0;
+
+    padding: 16px 2.5%;
+    display: grid;
+
+    /*
+        minmax(mínimo, máximo) limita cada coluna.
+        A busca recebe ao menos 300px.
+        A coluna de resultado recebe uma proporção maior do espaço.
+    */
+    grid-template-columns:
+        minmax(300px, 1fr)
+        minmax(0, 2.7fr);
+
+    gap: 20px;
+
+    /* Estica os painéis na altura disponível da linha. */
+    align-items: stretch;
+}
+
+.introducao {
+    /* Permite reduzir a largura sem forçar a coluna a aumentar. */
+    min-width: 0;
+
+    /* Quatro valores: cima, direita, baixo e esquerda. */
+    padding: 16px 5px 10px 0;
+}
+
+.etiqueta {
+    margin: 0 0 10px;
+    color: var(--vermelho);
+    font-size: 11px;
+    font-weight: 800;
+
+    /* Aumenta a distância entre as letras. */
+    letter-spacing: 1.4px;
+}
+
+h1 {
+    margin: 0 0 16px;
+
+    /*
+        clamp(mínimo, ideal, máximo) cria um tamanho fluido.
+        vw equivale a 1% da largura da janela.
+    */
+    font-size: clamp(28px, 2.3vw, 37px);
+
+    /* Altura da linha proporcional ao tamanho da fonte. */
+    line-height: 1.15;
+
+    letter-spacing: -0.8px;
+}
+
+/* Esconde a quebra explícita; o título quebra naturalmente. */
+h1 br {
+    display: none;
+}
+
+/*
+    > seleciona filhos diretos.
+    :not() exclui elementos que correspondam ao seletor informado.
+*/
+.descricao,
+.introducao > p:not(.etiqueta):not(#msg) {
+    margin: 0 0 18px;
+    color: var(--suave);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+h2 {
+    margin: 0 0 9px;
+    font-size: 23px;
+    line-height: 1.2;
+}
+
+h3 {
+    margin: 18px 0 7px;
+    font-size: 16px;
+}
+
+.apoio {
+    margin: 0 0 12px;
+    color: var(--suave);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+small {
+    display: block;
+    color: var(--suave);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ==========================================
+   FORMULÁRIO
+   ========================================== */
+
+form {
+    margin-top: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.busca {
+    display: flex;
+
+    /* Organiza campo e botão um abaixo do outro. */
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+input {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #bfc7d2;
+
+    /* Arredonda os cantos. */
+    border-radius: 9px;
+
+    background: white;
+    color: var(--texto);
+    font-size: 15px;
+}
+
+/* ::placeholder altera somente o texto de exemplo do campo. */
+input::placeholder {
+    color: #737d8b;
+}
+
+#buscar {
+    min-height: 44px;
+    padding: 12px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--vermelho);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* :hover aplica estilos enquanto o ponteiro está sobre o botão. */
+#buscar:hover {
+    background: #9e2330;
+}
+
+/* :disabled seleciona botões desabilitados pelo JavaScript. */
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+form small {
+    margin-top: 9px;
+    font-size: 12px;
+}
+
+.exemplos {
+    display: flex;
+
+    /* Permite levar os itens para outra linha quando faltar espaço. */
+    flex-wrap: wrap;
+
+    align-items: center;
+    gap: 7px;
+    margin-top: 20px;
+    color: var(--suave);
+    font-size: 12px;
+}
+
+.exemplos > span {
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+.exemplos button {
+    padding: 8px 11px;
+    border: 1px solid var(--borda);
+    border-radius: 20px;
+    background: white;
+    color: var(--texto);
+    font-size: 12px;
+}
+
+.exemplos button:hover {
+    border-color: var(--vermelho);
+    color: var(--vermelho);
+}
+
+#msg {
+    /* Reserva espaço para reduzir mudanças bruscas no layout. */
+    min-height: 30px;
+
+    margin: 18px 0 0;
+    color: var(--suave);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ==========================================
+   PAINÉIS DE RESULTADO
+   ========================================== */
+
+#resultado {
+    min-width: 0;
+    display: grid;
+
+    /*
+        A primeira linha pode crescer.
+        min-content preserva a altura mínima exigida pelo conteúdo.
+        A segunda linha usa a altura necessária às estatísticas.
+    */
+    grid-template-rows: minmax(min-content, 1fr) auto;
+
+    gap: 16px;
+}
+
+.painel-principal {
+    min-width: 0;
+    display: grid;
+
+    /* Divide a área superior entre retrato e detalhes. */
+    grid-template-columns:
+        minmax(220px, 1fr)
+        minmax(0, 1.5fr);
+
+    gap: 16px;
+    align-items: stretch;
+}
+
+.retrato,
+.detalhes,
+.estatisticas,
+.vazio {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--borda);
+    border-radius: 16px;
+    background: white;
+}
+
+/* ==========================================
+   IMAGEM E IDENTIFICAÇÃO
+   ========================================== */
+
+.retrato {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    /* Cria uma transição de cores em um ângulo de 140 graus. */
+    background: linear-gradient(140deg, #fff6ee, white);
+}
+
+.retrato .etiqueta {
+    margin-bottom: 7px;
+}
+
+#nomePokemon {
+    max-width: 100%;
+    margin: 0 0 12px;
+    font-size: clamp(27px, 2.4vw, 36px);
+    line-height: 1.1;
+
+    /* Permite quebrar nomes extensos para evitar transbordamento. */
+    overflow-wrap: anywhere;
+
+    /* Exibe a primeira letra de cada palavra em maiúscula. */
+    text-transform: capitalize;
+}
+
+.tipos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px;
+}
+
+.tipo {
+    padding: 6px 13px;
+    border-radius: 20px;
+    background: #e8edf2;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#imgPoke {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    height: clamp(170px, 29vh, 300px);
+
+    /* auto nas laterais centraliza a imagem no espaço disponível. */
+    margin: 12px auto;
+
+    /* Mostra a imagem inteira, sem distorcer suas proporções. */
+    object-fit: contain;
+}
+
+.retrato small {
+    max-width: 280px;
+    font-size: 11px;
+}
+
+#semImagem {
+    margin: 40px 0;
+    color: var(--suave);
+    font-size: 13px;
+}
+
+/* ==========================================
+   CARACTERÍSTICAS E HABILIDADES
+   ========================================== */
+
+.detalhes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.metricas {
+    display: grid;
+
+    /* repeat cria duas colunas com a mesma proporção. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+    margin: 14px 0;
+}
+
+.metricas div {
+    min-width: 0;
+    padding: 14px;
+    border-radius: 10px;
+    background: var(--fundo);
+}
+
+dt {
+    margin-bottom: 7px;
+    color: var(--suave);
+    font-size: 12px;
+}
+
+dd {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.habilidades {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 9px 0 0;
+    padding: 0;
+
+    /* Remove os marcadores padrão da lista. */
+    list-style: none;
+}
+
+.habilidades li {
+    max-width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+    text-transform: capitalize;
+}
+
+.habilidades small {
+    margin-top: 4px;
+    color: var(--vermelho);
+    font-size: 11px;
+
+    /* Mantém o texto exatamente como foi escrito no JavaScript. */
+    text-transform: none;
+}
+
+/* ==========================================
+   ESTATÍSTICAS
+   ========================================== */
+
+.estatisticas {
+    display: grid;
+    grid-template-columns:
+        minmax(160px, 0.85fr)
+        minmax(0, 2fr);
+    align-items: center;
+    gap: 20px;
+}
+
+.estatisticas h2 {
+    font-size: 22px;
+}
+
+.estatisticas .apoio {
+    margin-bottom: 0;
+    font-size: 11px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px 22px;
+}
+
+.stats > div {
+    min-width: 0;
+}
+
+.stat-titulo {
+    display: flex;
+    justify-content: space-between;
+
+    /* Alinha os textos pela linha de base das letras. */
+    align-items: baseline;
+
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.stat-titulo strong {
+    /* Impede que o número seja comprimido pelo Flexbox. */
+    flex-shrink: 0;
+
+    font-size: 13px;
+}
+
+progress {
+    display: block;
+    width: 100%;
+    height: 9px;
+
+    /* Esconde partes que ultrapassem os cantos arredondados. */
+    overflow: hidden;
+
+    border: 0;
+    border-radius: 8px;
+    background: #edf0f4;
+
+    /* Define a cor principal do controle em navegadores compatíveis. */
+    accent-color: var(--vermelho);
+}
+
+/* Personaliza o fundo da barra no Chrome e Edge. */
+progress::-webkit-progress-bar {
+    border-radius: 8px;
+    background: #edf0f4;
+}
+
+/* Personaliza a parte preenchida no Chrome e Edge. */
+progress::-webkit-progress-value {
+    border-radius: 8px;
+    background: var(--vermelho);
+}
+
+/* Personaliza a parte preenchida no Firefox. */
+progress::-moz-progress-bar {
+    border-radius: 8px;
+    background: var(--vermelho);
+}
+
+/* ==========================================
+   PAINEL INICIAL
+   ========================================== */
+
+.vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 35px;
+    border-style: dashed;
+    text-align: center;
+
+    /* Gradiente circular que parte do centro do painel. */
+    background:
+        radial-gradient(
+            circle at center,
+            #fff1ed 0%,
+            #ffffff 65%
+        );
+}
+
+.vazio > span {
+    display: block;
+    margin-bottom: 22px;
+    color: var(--vermelho);
+    font-size: clamp(75px, 9vw, 130px);
+    line-height: 1;
+}
+
+.vazio h2 {
+    max-width: 580px;
+    margin-bottom: 12px;
+    font-size: clamp(24px, 2.3vw, 34px);
+    line-height: 1.25;
+}
+
+.vazio p {
+    max-width: 480px;
+    margin: 0;
+    color: var(--suave);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   RODAPÉ
+   ========================================== */
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 2.5%;
+    border-top: 1px solid var(--borda);
+    color: var(--suave);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* ==========================================
+   ADAPTAÇÃO PARA NOTEBOOKS MAIS BAIXOS
+   ========================================== */
+
+/*
+    @media aplica regras somente quando a condição for atendida.
+    Aqui: largura de pelo menos 901px E altura de até 740px.
+    As propriedades abaixo substituem as anteriores correspondentes.
+*/
+@media (min-width: 901px) and (max-height: 740px) {
+    .topo {
+        min-height: 46px;
+
+        /* padding-block altera o preenchimento acima e abaixo. */
+        padding-block: 7px;
+    }
+
+    main {
+        padding-block: 12px;
+        gap: 16px;
+    }
+
+    .introducao {
+        padding-top: 8px;
+    }
+
+    h1 {
+        margin-bottom: 12px;
+        font-size: 28px;
+    }
+
+    .descricao,
+    .introducao > p:not(.etiqueta):not(#msg) {
+        margin-bottom: 12px;
+        font-size: 13px;
+    }
+
+    form {
+        margin-top: 18px;
+    }
+
+    input {
+        height: 42px;
+        font-size: 14px;
+    }
+
+    #buscar {
+        min-height: 40px;
+        font-size: 13px;
+    }
+
+    .exemplos {
+        margin-top: 14px;
+    }
+
+    #msg {
+        margin-top: 12px;
+    }
+
+    #resultado,
+    .painel-principal {
+        gap: 12px;
+    }
+
+    .retrato,
+    .detalhes,
+    .estatisticas {
+        padding: 16px;
+    }
+
+    #nomePokemon {
+        margin-bottom: 9px;
+        font-size: 28px;
+    }
+
+    #imgPoke {
+        height: clamp(150px, 27vh, 210px);
+
+        /* margin-block altera as margens acima e abaixo. */
+        margin-block: 8px;
+    }
+
+    h2 {
+        margin-bottom: 7px;
+        font-size: 21px;
+    }
+
+    .etiqueta {
+        margin-bottom: 7px;
+    }
+
+    .apoio {
+        margin-bottom: 8px;
+    }
+
+    .metricas {
+        gap: 8px;
+        margin-block: 10px;
+    }
+
+    .metricas div {
+        padding: 10px 12px;
+    }
+
+    dd {
+        font-size: 22px;
+    }
+
+    h3 {
+        margin-top: 12px;
+    }
+
+    .habilidades li {
+        padding: 7px 10px;
+        font-size: 12px;
+    }
+
+    .stats {
+        gap: 11px 18px;
+    }
+
+    .estatisticas h2 {
+        font-size: 20px;
+    }
+
+    footer {
+        padding-block: 7px;
+        font-size: 10px;
+    }
+}
+
+/* ==========================================
+   TABLETS E JANELAS DE ATÉ 900px
+   ========================================== */
+
+@media (max-width: 900px) {
+    main {
+        /* Uma coluna: busca e resultado ficam empilhados. */
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 20px 4%;
+    }
+
+    .introducao {
+        padding: 0;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .busca {
+        /* Campo e botão ficam lado a lado quando há espaço. */
+        flex-direction: row;
+    }
+
+    input {
+        /* Permite ao campo ocupar o espaço restante da linha. */
+        flex: 1;
+    }
+
+    #buscar {
+        /* padding-inline altera o preenchimento lateral. */
+        padding-inline: 18px;
+        white-space: nowrap;
+    }
+
+    .exemplos > span {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .painel-principal {
+        grid-template-columns:
+            minmax(200px, 1fr)
+            minmax(0, 1.4fr);
+    }
+
+    .retrato,
+    .detalhes,
+    .estatisticas {
+        padding: 18px;
+    }
+
+    .estatisticas {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    #imgPoke {
+        height: 210px;
+    }
+
+    .vazio {
+        min-height: 300px;
+    }
+
+    .vazio > span {
+        font-size: 80px;
+    }
+}
+
+/* ==========================================
+   CELULARES E JANELAS DE ATÉ 600px
+   ========================================== */
+
+@media (max-width: 600px) {
+    .topo {
+        min-height: 52px;
+        padding-inline: 4%;
+    }
+
+    .marca {
+        font-size: 23px;
+    }
+
+    .marca span,
+    .selo {
+        /* Remove textos secundários para liberar espaço. */
+        display: none;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .busca {
+        flex-direction: column;
+    }
+
+    .painel-principal {
+        grid-template-columns: 1fr;
+    }
+
+    #nomePokemon {
+        font-size: 30px;
+    }
+
+    #imgPoke {
+        height: 200px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .vazio {
+        min-height: 280px;
+        padding: 25px;
+    }
+
+    .vazio h2 {
+        font-size: 24px;
+    }
+
+    .vazio p {
+        font-size: 14px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 5px;
+        padding-inline: 4%;
+        font-size: 10px;
+    }
+}
